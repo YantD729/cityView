@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>city view - city photo searching website</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,6 +12,11 @@
     <div id="searching-box">
         <input type="text" id="searchInput">
         <button id="searchButton">Search</button>
+    </div>
+    <div class="image-box">
+        <button class="prev-btn" data-carousel-button="prev"><</button>
+        <div class="slides"></div>
+        <button class="next-btn" data-carousel-button="next">></button>
     </div>
 </body>
 </html>
