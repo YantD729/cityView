@@ -47,6 +47,7 @@ html {
 
 .image-box {
   position: relative;
+  overflow: hidden;
   display: flex;
   height: 150px;
   margin-right: 5%;
@@ -54,10 +55,28 @@ html {
   justify-content: space-between;
 }
 .image-box .slides {
+  overflow: hidden;
+  display: flex;
   position: absolute;
   height: 100%;
+  width: calc(100% - 20vw);
   left: 10vw;
   right: 10vw;
+}
+.image-box .slides .slide {
+  width: 100%;
+  display: flex;
+  flex: 1;
+}
+.image-box .slides .slide img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 5%;
+}
+.image-box .slides .slide img:hover {
+  cursor: pointer;
+  opacity: 75%;
 }
 .image-box .prev-btn,
 .image-box .next-btn {

@@ -57,16 +57,34 @@ html {
 
 .image-box {
     position: relative;
+    overflow: hidden;
     display: flex;
     height: 150px;
     margin-right: 5%;
     margin-left: 5%;
     justify-content: space-between;
     .slides {
+        overflow: hidden;
+        display: flex;
         position: absolute;
         height: 100%;
+        width: calc(100% - 20vw);
         left: 10vw; 
         right: 10vw; 
+        .slide {
+            width: 100%;
+            display: flex;
+            flex: 1;
+            img {
+                width: 100%;
+                object-fit: cover;
+                border-radius: 5%;
+                &:hover {
+                    cursor: pointer;
+                    opacity: 75%;
+                }
+            }
+        }
     }
     .prev-btn,
     .next-btn {
