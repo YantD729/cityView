@@ -78,6 +78,9 @@ html {
   cursor: pointer;
   opacity: 75%;
 }
+.image-box .slides .slide[data-active] {
+  opacity: 50%;
+}
 .image-box .prev-btn,
 .image-box .next-btn {
   position: absolute;

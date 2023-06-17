@@ -2,6 +2,7 @@ const html = document.querySelector("html")
 const searchBtn = document.querySelector("#searching-box button")
 const myAPIKey = "6hL3QGStGy43v6iOg0fN92ZTQCWbcWuGuh0QwyeoC50"
 const slidesContainer = document.querySelector(".slides")
+let activeIndex = 0;
 let keyword = document.querySelector("#searching-box input").value
 let backgroundImgUrl = ""
 let picData = null
@@ -33,7 +34,7 @@ getRandom()
 searchBtn.addEventListener("click", function(event) {
   event.preventDefault();
   keyword = document.querySelector("#searching-box input").value
-  displayImages(keyword, 3)
+  searchPics(keyword, 3)
     .then(() => {
       changeBGImage();
       setPaginationPics()
@@ -43,6 +44,15 @@ searchBtn.addEventListener("click", function(event) {
     });
 }) 
 
+slides.forEach((slide, index) => {
+  slide.addEventListener("click", () => {
+    currSlide = slides[activeIndex];
+    slide.dataset.active = true
+    activeIndex = index
+    changeBGImage();
+    delete currSlide.dataset.active
+})
+})
 
 function getRandom() {
   return axios({
@@ -51,31 +61,33 @@ function getRandom() {
   })
     .then(response => {
       picData = response.data.results
+      activeIndex = 0;
     });
 }
 
-function displayImages(keyword, page) {
+function searchPics(keyword, page) {
   return axios({
     method: 'get',
     url: `https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${myAPIKey}`,
   })
     .then(response => {
       picData = response.data.results
+      activeIndex = 0;
     });
 }
 
 function changeBGImage() {
-  backgroundImgUrl = picData[0].urls.regular;
+  backgroundImgUrl = picData[activeIndex].urls.regular;
   html.style.backgroundImage = `url(${backgroundImgUrl})`;
 }
 
-function changePics() {
-  slides.forEach(function(slide, index) {
-    const imgUrl = picData[index].urls.thumb;
-    const imgElement = slide.querySelector("img");
-    imgElement.src = imgUrl;
-  })
-}
+// function changePics() {
+//   slides.forEach(function(slide, index) {
+//     const imgUrl = picData[index].urls.thumb;
+//     const imgElement = slide.querySelector("img");
+//     imgElement.src = imgUrl;
+//   })
+// }
 
 function setPaginationPics() {
   picData.forEach(function(pic, index) {

@@ -85,6 +85,9 @@ html {
                 }
             }
         }
+        .slide[data-active] {
+            opacity: 50%;
+        }
     }
     .prev-btn,
     .next-btn {
