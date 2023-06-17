@@ -4,6 +4,8 @@ html {
   font-weight: 300;
   background: url(1.png) no-repeat center center fixed;
   background-size: cover;
+  transition: 200ms opacity ease-in-out;
+  transition-delay: 200ms;
 }
 
 #searching-box {
@@ -67,6 +69,8 @@ html {
   width: 100%;
   display: flex;
   flex: 1;
+  transition: 200ms opacity ease-in-out;
+  transition-delay: 200ms;
 }
 .image-box .slides .slide img {
   width: 100%;

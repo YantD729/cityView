@@ -2,11 +2,10 @@ const html = document.querySelector("html")
 const searchBtn = document.querySelector("#searching-box button")
 const myAPIKey = "6hL3QGStGy43v6iOg0fN92ZTQCWbcWuGuh0QwyeoC50"
 const slidesContainer = document.querySelector(".slides")
-let activeIndex = 0;
+const buttons = document.querySelectorAll("[data-carousel-button]")
 let keyword = document.querySelector("#searching-box input").value
-let backgroundImgUrl = ""
-let picData = null
-
+let activeIndex = 0, picData = null, currPageUrl = null, backgroundImgUrl = ""
+    maxPageNum = 0;
 
 for (let i = 0; i < 10; i++) {
   const slideElem = document.createElement('div')
@@ -34,7 +33,7 @@ getRandom()
 searchBtn.addEventListener("click", function(event) {
   event.preventDefault();
   keyword = document.querySelector("#searching-box input").value
-  searchPics(keyword, 3)
+  searchPics(keyword, 1)
     .then(() => {
       changeBGImage();
       setPaginationPics()
@@ -51,18 +50,44 @@ slides.forEach((slide, index) => {
     activeIndex = index
     changeBGImage();
     delete currSlide.dataset.active
-})
+  })
 })
 
-function getRandom() {
-  return axios({
-    method: 'get',
-    url: `https://api.unsplash.com/search/photos?page=1&query=cat&client_id=${myAPIKey}`,
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+      let currPageIdx = extractPageFromLink(currPageUrl) 
+      const offset = (button.dataset.carouselButton === 'next') ? 1 : -1
+      currPageIdx += offset
+      if (currPageIdx < 0) {
+        currPageIdx = maxPageNum 
+      }
+      if (currPageIdx > maxPageNum) currPageIdx = 0
+      refreshPics(currPageIdx)
+      changeBGImage()
+      console.log(currPageIdx)
   })
-    .then(response => {
-      picData = response.data.results
-      activeIndex = 0;
-    });
+})
+
+function extractPageFromLink(link) {
+  const regex = /[?&]page=(\d+)/;
+  const match = regex.exec(link);
+  if (match) {
+    return parseInt(match[1]);
+  }
+  return null;
+}
+
+function extractLink(links, rel) {
+  const regex = new RegExp(`<([^>]+)>;\\s*rel="${rel}"`, "i");
+  const match = regex.exec(links);
+  if (match) {
+    return match[1];
+  }
+  return null;
+}
+
+function getRandom() {
+  return searchPics("cat", "1")
 }
 
 function searchPics(keyword, page) {
@@ -71,8 +96,26 @@ function searchPics(keyword, page) {
     url: `https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${myAPIKey}`,
   })
     .then(response => {
+      // console.log(response)
+      const links = response.headers.link
+      maxPageNum = extractPageFromLink(extractLink(links, "last"))
+      currPageUrl = response.config.url
       picData = response.data.results
       activeIndex = 0;
+    });
+}
+
+function refreshPics(newPageIdx) {
+  currPageUrl = changePageInLink(currPageUrl, newPageIdx)
+  return axios({
+    method: 'get',
+    url: currPageUrl,
+  })
+    .then(response => {
+      // console.log(response)
+      picData = response.data.results
+      activeIndex = 0;
+      setPaginationPics()
     });
 }
 
@@ -81,13 +124,14 @@ function changeBGImage() {
   html.style.backgroundImage = `url(${backgroundImgUrl})`;
 }
 
-// function changePics() {
-//   slides.forEach(function(slide, index) {
-//     const imgUrl = picData[index].urls.thumb;
-//     const imgElement = slide.querySelector("img");
-//     imgElement.src = imgUrl;
-//   })
-// }
+function extractLink(links, rel) {
+  const regex = new RegExp(`<([^>]+)>;\\s*rel="${rel}"`, "i");
+  const match = regex.exec(links);
+  if (match) {
+    return match[1];
+  }
+  return null;
+}
 
 function setPaginationPics() {
   picData.forEach(function(pic, index) {
@@ -96,5 +140,10 @@ function setPaginationPics() {
     const imgElement = slide.querySelector("img");
     imgElement.src = imgUrl;
   })
+}
+
+function changePageInLink(link, newPage) {
+  const regex = /(&|\?)page=\d+/;
+  return link.replace(regex, `$1page=${newPage}`);
 }
 
