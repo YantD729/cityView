@@ -4,20 +4,21 @@ const myAPIKey = "6hL3QGStGy43v6iOg0fN92ZTQCWbcWuGuh0QwyeoC50"
 const slidesContainer = document.querySelector(".slides")
 const buttons = document.querySelectorAll("[data-carousel-button]")
 const searchBar = document.querySelector('#searching-box input')
+const historyContainer = document.querySelector("#search-history")
 let keyword = searchBar.value
 let activeIndex = 0, picData = null, currPageUrl = null, backgroundImgUrl = ""
     maxPageNum = 0
 
 for (let i = 0; i < 10; i++) {
   const slideElem = document.createElement('div')
-    slideElem.className = 'slide'
+  slideElem.className = 'slide'
 
-    const imgElem = document.createElement('img')
+  const imgElem = document.createElement('img')
 
-    if (i === 0) slideElem.setAttribute('data-active', '')
+  if (i === 0) slideElem.setAttribute('data-active', '')
 
-    slideElem.appendChild(imgElem)
-    slidesContainer.appendChild(slideElem)
+  slideElem.appendChild(imgElem)
+  slidesContainer.appendChild(slideElem)
 }
 
 const slides = document.querySelectorAll(".slide")
@@ -49,10 +50,8 @@ slides.forEach((slide, index) => {
   slide.addEventListener("click", () => {
     prevSlide = slides[activeIndex]
     delete prevSlide.dataset.active
-    console.log(activeIndex)
     slide.dataset.active = true
     activeIndex = index
-    console.log(activeIndex)
     changeBGImage()
   })
 })
@@ -66,7 +65,9 @@ buttons.forEach(button => {
       if (currPageIdx < 0) {
         currPageIdx = maxPageNum 
       }
+      console.log(currPageIdx)
       if (currPageIdx > maxPageNum) currPageIdx = 0
+      console.log(maxPageNum)
       refreshPics(currPageIdx)
   })
 })
@@ -81,12 +82,12 @@ function extractPageFromLink(link) {
 }
 
 function extractLink(links, rel) {
-  const regex = new RegExp(`<([^>]+)>\\s*rel="${rel}"`, "i")
-  const match = regex.exec(links)
+  const regex = new RegExp(`<([^>]+)>;\\s*rel="${rel}"`, "i");
+  const match = regex.exec(links);
   if (match) {
-    return match[1]
+    return match[1];
   }
-  return null
+  return null;
 }
 
 function getRandom() {
@@ -99,7 +100,6 @@ function searchPics(keyword, page) {
     url: `https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${myAPIKey}`,
   })
     .then(response => {
-      console.log(response)
       const links = response.headers.link
       maxPageNum = extractPageFromLink(extractLink(links, "last"))
       currPageUrl = response.config.url
@@ -115,7 +115,6 @@ function refreshPics(newPageIdx) {
     url: currPageUrl,
   })
     .then(response => {
-      // console.log(response)
       activeIndex = 0
       picData = response.data.results
       changeBGImage()
@@ -126,15 +125,6 @@ function refreshPics(newPageIdx) {
 function changeBGImage() {
   backgroundImgUrl = picData[activeIndex].urls.regular
   html.style.backgroundImage = `url(${backgroundImgUrl})`
-}
-
-function extractLink(links, rel) {
-  const regex = new RegExp(`<([^>]+)>\\s*rel="${rel}"`, "i")
-  const match = regex.exec(links)
-  if (match) {
-    return match[1]
-  }
-  return null
 }
 
 function setPaginationPics() {
@@ -153,24 +143,23 @@ function changePageInLink(link, newPage) {
 
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || []
 
-const historyContainer = document.querySelector('#search-history')
-
 searchBar.addEventListener('input', (e) => {
   const filteredHistory = searchHistory.filter(keyword => keyword.includes(e.target.value))
   historyContainer.innerHTML = ''
   filteredHistory.forEach((keyword) => {
     const li = document.createElement('li')
     li.textContent = keyword
-    li.onclick = function() {
+    li.addEventListener('click', function() {
+      console.log("get into bar autofill")
       searchBar.value = this.textContent
       historyContainer.style.display = 'none'
-    }
+    })
     historyContainer.appendChild(li)
   })
 })
 
-document.querySelector("#search-button").addEventListener('click', () => {
-  updateSearchHistory(searchBar.value)
+searchBar.addEventListener('click', () => {
+  displaySearchHistory()
 })
 
 function updateSearchHistory(keyword) {
@@ -190,28 +179,11 @@ function displaySearchHistory() {
   searchHistory.forEach((keyword) => {
     const li = document.createElement('li')
     li.textContent = keyword
-    li.onclick = function() {
+    li.addEventListener('click', function() {
+      console.log("get into bar autofill")
       searchBar.value = this.textContent
-    }
+      // historyContainer.style.display = 'none'
+    })
     historyContainer.appendChild(li)
   })
 }
-
-searchBar.addEventListener('input', () => {
-  const filterKeyword = searchBar.value
-  const filteredHistory = searchHistory.filter(keyword =>
-    keyword.toLowerCase().includes(filterKeyword.toLowerCase())
-  )
-
-  const historyContainer = document.querySelector("#search-history")
-  historyContainer.innerHTML = ''
-
-  filteredHistory.forEach((keyword) => {
-    const li = document.createElement('li')
-    li.textContent = keyword
-    li.onclick = function() {
-      searchBar.value = this.textContent
-    }
-    historyContainer.appendChild(li)
-  })
-})

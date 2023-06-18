@@ -1,9 +1,8 @@
-@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500&display=swap");
 html {
   font-family: "Roboto Mono", monospace;
   font-weight: 300;
-  background: url(1.png) no-repeat center center fixed;
+  background: url(../1.png) no-repeat center center fixed;
   background-size: cover;
   transition: 200ms opacity ease-in-out;
   transition-delay: 200ms;
@@ -38,13 +37,13 @@ html {
 #searching-box #input-container #search-history {
   padding-left: 0;
   position: absolute;
-  top: 30px; /* 调整此处的值使其符合你的搜索框的高度 */
+  top: 30px;
   background-color: white;
   border: 1px solid #ccc;
   width: calc(50vw - 14px);
   max-height: 150px;
   overflow: auto;
-  display: none; /* 默认不显示搜索历史 */
+  display: none;
 }
 #searching-box #input-container #search-history li {
   cursor: pointer;
@@ -54,7 +53,7 @@ html {
   background-color: #eee;
 }
 #searching-box #input-container input:focus + #search-history {
-  display: block; /* 当输入框获得焦点时显示搜索历史 */
+  display: block;
 }
 #searching-box button {
   font-family: "Roboto Mono", monospace;

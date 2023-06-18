@@ -10,7 +10,7 @@ $placeholder-text: "input city name...";
 
 html {
     @include basicFont;
-    background: url(1.png) no-repeat center center fixed; 
+    background: url(../1.png) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -46,13 +46,13 @@ html {
             padding-left: 0;
 
             position: absolute;
-            top: 30px; /* 调整此处的值使其符合你的搜索框的高度 */
+            top: 30px; 
             background-color: white;
             border: 1px solid #ccc;
             width: calc(50vw - 14px);
             max-height: 150px;
             overflow: auto;
-            display: none; /* 默认不显示搜索历史 */
+            display: none;
             li {
                 cursor: pointer;
                 list-style-type: none;
@@ -62,7 +62,7 @@ html {
             }
         }
         input:focus + #search-history {
-            display: block; /* 当输入框获得焦点时显示搜索历史 */
+            display: block; 
         }
     }
 
