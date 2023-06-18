@@ -54,7 +54,7 @@ html {
             font-weight: 500;
             opacity: 1;
         }
-    }
+    }  
 }
 
 .image-box {
@@ -62,21 +62,22 @@ html {
     overflow: hidden;
     display: flex;
     height: 150px;
-    margin-right: 5%;
-    margin-left: 5%;
+    margin-right: 2%;
+    margin-left: 2%;
     justify-content: space-between;
     .slides {
         overflow: hidden;
         display: flex;
         position: absolute;
         height: 100%;
-        width: calc(100% - 20vw);
-        left: 10vw; 
-        right: 10vw; 
+        width: calc(100% - 10vw);
+        left: 5vw; 
+        right: 5vw; 
         .slide {
             width: 100%;
             display: flex;
             flex: 1;
+            margin-right: 0.2vw;
             transition: 200ms opacity ease-in-out;
             transition-delay: 200ms;
             img {
@@ -102,7 +103,7 @@ html {
         cursor: pointer;
         font-size: 4rem;
         height: 100%;
-        width: 10vw;
+        width: 5vw;
         border: 0px;
         outline: 0px;
         &:active {

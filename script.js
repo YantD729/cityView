@@ -45,16 +45,19 @@ searchBtn.addEventListener("click", function(event) {
 
 slides.forEach((slide, index) => {
   slide.addEventListener("click", () => {
-    currSlide = slides[activeIndex];
+    prevSlide = slides[activeIndex]
+    delete prevSlide.dataset.active
+    console.log(activeIndex)
     slide.dataset.active = true
     activeIndex = index
+    console.log(activeIndex)
     changeBGImage();
-    delete currSlide.dataset.active
   })
 })
 
 buttons.forEach(button => {
   button.addEventListener("click", () => {
+      delete slides[activeIndex].dataset.active
       let currPageIdx = extractPageFromLink(currPageUrl) 
       const offset = (button.dataset.carouselButton === 'next') ? 1 : -1
       currPageIdx += offset
@@ -63,8 +66,6 @@ buttons.forEach(button => {
       }
       if (currPageIdx > maxPageNum) currPageIdx = 0
       refreshPics(currPageIdx)
-      changeBGImage()
-      console.log(currPageIdx)
   })
 })
 
@@ -96,7 +97,7 @@ function searchPics(keyword, page) {
     url: `https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${myAPIKey}`,
   })
     .then(response => {
-      // console.log(response)
+      console.log(response)
       const links = response.headers.link
       maxPageNum = extractPageFromLink(extractLink(links, "last"))
       currPageUrl = response.config.url
@@ -113,8 +114,9 @@ function refreshPics(newPageIdx) {
   })
     .then(response => {
       // console.log(response)
-      picData = response.data.results
       activeIndex = 0;
+      picData = response.data.results
+      changeBGImage()
       setPaginationPics()
     });
 }
