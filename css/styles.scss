@@ -20,8 +20,8 @@ html {
 }
 
 #searching-box {
-    position: relative;
     display: flex;
+    position: relative;
     justify-content: center;
     height: 20%;
     width: 60%;
@@ -30,16 +30,42 @@ html {
     margin-left: 20%;
     margin-right: 20%;
     margin-bottom: 30vh;
-    input[type="text"] {
-        @include basicFont;
-        margin-right: 14px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-        width: 300px;
-        
+    #input-container {
+        width: 50vw;
+        display: flex;
+        input[type="text"] {
+            @include basicFont;
+            margin-right: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 50vw;
+        }
+        #search-history {
+            padding-left: 0;
+
+            position: absolute;
+            top: 30px; /* 调整此处的值使其符合你的搜索框的高度 */
+            background-color: white;
+            border: 1px solid #ccc;
+            width: calc(50vw - 14px);
+            max-height: 150px;
+            overflow: auto;
+            display: none; /* 默认不显示搜索历史 */
+            li {
+                cursor: pointer;
+                list-style-type: none;
+                &:hover {
+                    background-color: #eee;
+                }
+            }
+        }
+        input:focus + #search-history {
+            display: block; /* 当输入框获得焦点时显示搜索历史 */
+        }
     }
+
     button {
         @include basicFont;
         opacity: 75%;
@@ -114,3 +140,13 @@ html {
         right: 0px;
     }
 }
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
