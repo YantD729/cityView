@@ -91,7 +91,7 @@ function extractLink(links, rel) {
 }
 
 function getRandom() {
-  return searchPics("cat", "1")
+  return searchPics("Pittsburgh", "1")
 }
 
 function searchPics(keyword, page) {
